@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <!--<link rel="stylesheet" href="style.css">-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <title>Stock Visualizer</title>
+</head>
+
+<body>
+    <h2>Interactive Stock Visualizer</h2>
+    <label for="ticker-input">Enter Symbol:</label>
+    <input type="text" id="ticker-input">
+    <input type="button" value="submit" id="submit-btn">
+    <div id="graph-area">
+        <canvas id="myChart"></canvas>
+    </div>
+    <br>
+    <div>
+        Friendly reminder: if the graphing function stops working after several successful instances, don't worry! It is likely that you have reached the 5 requests/minute rate limit of the free Alpha Vantage API key. The graph should work again in the next minute or after you obtain a <a href="https://www.alphavantage.co/premium/" target="_blank">premium API key</a> with a higher rate limit.
+    </div>
+    <script src="{% static 'home.js' %}">
+    </script>
+</body>
+</html>

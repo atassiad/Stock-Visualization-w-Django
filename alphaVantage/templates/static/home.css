@@ -1,0 +1,17 @@
+body {
+    padding: 0px 0px;
+    margin: 2rem 2rem;
+    background-color: burlywood;
+    justify-items: center;
+}
+
+h2 {
+    text-align: center;
+}
+
+#graph-area {
+    background-color: white;
+    border: 0.25rem solid black;
+    height: 80%;
+    width: 80%;
+}
