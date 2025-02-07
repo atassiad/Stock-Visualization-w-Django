@@ -150,8 +150,17 @@ $('#submit-btn').click(function() {
             'ticker': tickerText,
         },
         success: function (res, status) {
-            var tickerDisplay = res['sma']['Meta Data']['1: Symbol'];
-            var graphTitle = tickerDisplay + ' (data for the trailing 500 trading days)';
+            try {
+                var tickerDisplay = res['sma']['Meta Data']['1: Symbol'];
+                var graphTitle = tickerDisplay + ' (data for the trailing 500 trading days)';
+            } catch(error) {
+                if (error instanceof TypeError){
+                    console.error("ERROR: Invalid ticker, or unable to query ticker", error.message);
+                    return 1;
+                }
+                console.error("ERROR: ", error.message);
+                return 1;
+            } 
 
             //update dates and smaseries data
             var dates = [];
@@ -222,8 +231,17 @@ $('#submit-btn-2').click(function() {
         },
         success: function (res, status) {
             // Use the symbol from the crytpo metadata
-            var currencyCodeDisplay = res['Time Series (Digital Currency Daily)']['Meta Data']['3. Digital Currency Name'];
-            var graphTitle = currencyCodeDisplay + ' (data for the trailing 500 trading days)';
+            try {
+                var currencyCodeDisplay = res['Time Series (Digital Currency Daily)']['Meta Data']['3. Digital Currency Name'];
+                var graphTitle = currencyCodeDisplay + ' (data for the trailing 500 trading days)';
+            } catch(error) {
+                if (error instanceof TypeError){
+                    console.error("ERROR: Invalid currency code, or unable to query currency code", error.message);
+                    return 1;
+                }
+                console.error("ERROR: ", error.message);
+                return 1;
+            } 
             
             // Extract crypto data
             var timeSeries = res['Time Series (Digital Currency Daily)']['Time Series (Digital Currency Daily)'];
