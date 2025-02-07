@@ -11,16 +11,31 @@
 
 <body>
     <h2>Interactive Stock Visualizer</h2>
+
+    <!-- First Graph and Input Area-->
     <label for="ticker-input">Enter Symbol:</label>
     <input type="text" id="ticker-input">
     <input type="button" value="submit" id="submit-btn">
     <div id="graph-area">
         <canvas id="myChart"></canvas>
     </div>
-    <br>
     <div>
         Friendly reminder: if the graphing function stops working after several successful instances, don't worry! It is likely that you have reached the 5 requests/minute rate limit of the free Alpha Vantage API key. The graph should work again in the next minute or after you obtain a <a href="https://www.alphavantage.co/premium/" target="_blank">premium API key</a> with a higher rate limit.
     </div>
+    <br>
+
+    <!-- Second Graph and Input Area-->
+    <label for="ticker-input-2">Enter Symbol:</label>
+    <input type="text" id="ticker-input-2">
+    <input type="button" value="submit" id="submit-btn-2">
+    <div id="graph-area-2">
+        <canvas id="myChart-2"></canvas>
+    </div>
+    <div>
+        Friendly reminder: if the graphing function stops working after several successful instances, don't worry! It is likely that you have reached the 5 requests/minute rate limit of the free Alpha Vantage API key. The graph should work again in the next minute or after you obtain a <a href="https://www.alphavantage.co/premium/" target="_blank">premium API key</a> with a higher rate limit.
+    </div>
+
+    <!-- Imported Script -->
     <script src="{% static 'home.js' %}">
     </script>
 </body>

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import StockData
+from .models import CryptoData
 from dotenv import load_dotenv
 import os
 
@@ -43,6 +44,36 @@ def get_stock_data(request):
         output_dictionary['sma'] = sma_series
 
         temp = StockData(symbol=ticker, data=json.dumps(output_dictionary))
+        temp.save()
+
+        return HttpResponse(json.dumps(output_dictionary), content_type='application/json')
+
+    else:
+        message = "Not Ajax"
+        return HttpResponse(message)
+    
+#get bitcoin prices
+@csrf_exempt
+def get_crypto_data(request):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        ticker = request.POST.get('ticker', 'null')
+        ticker = ticker.upper()
+
+        if DATABASE_ACCESS == True:
+            #checking if the database already has data stored for this ticker before querying the Alpha Vantage API
+            if CryptoData.objects.filter(symbol=ticker).exists(): 
+                entry = CryptoData.objects.filter(symbol=ticker)[0]
+                return HttpResponse(entry.data, content_type='application/json')
+
+        output_dictionary = {}
+
+        price_series = requests.get(f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={ticker}&apikey={APIKEY}&outputsize=full').json()
+        sma_series = requests.get(f'https://www.alphavantage.co/query?function=SMA&symbol={ticker}&interval=daily&time_period=10&series_type=close&apikey={APIKEY}').json()
+
+        output_dictionary['prices'] = price_series
+        output_dictionary['sma'] = sma_series
+
+        temp = CryptoData(symbol=ticker, data=json.dumps(output_dictionary))
         temp.save()
 
         return HttpResponse(json.dumps(output_dictionary), content_type='application/json')

@@ -9,7 +9,7 @@ h2 {
     text-align: center;
 }
 
-#graph-area {
+#graph-area, #graph-area-2 {
     background-color: white;
     border: 0.25rem solid black;
     height: 80%;
