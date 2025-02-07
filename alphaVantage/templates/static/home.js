@@ -40,8 +40,8 @@ $(document).ready(function(){
                         {
                             label: 'Simple Moving Average (SMA)',
                             data: slicedSMA,
-                            backgroundColor: 'blue',
-                            borderColor: 'blue',
+                            backgroundColor: 'brown',
+                            borderColor: 'black',
                             borderWidth: 1
                         },
                     ]
@@ -109,8 +109,8 @@ $(document).ready(function(){
                         {
                             label: 'Daily Close',
                             data: slicedCryptoData,
-                            backgroundColor: 'blue',
-                            borderColor: 'blue',
+                            backgroundColor: 'brown',
+                            borderColor: 'black',
                             borderWidth: 1
                         },
                     ]
@@ -193,8 +193,8 @@ $('#submit-btn').click(function() {
                         {
                             label: 'Simple Moving Average (SMA)',
                             data: slicedSMA,
-                            backgroundColor: 'blue',
-                            borderColor: 'blue',
+                            backgroundColor: 'brown',
+                            borderColor: 'black',
                             borderWidth: 1
                         },
                     ]
@@ -281,8 +281,8 @@ $('#submit-btn-2').click(function() {
                         {
                             label: 'Daily Close',
                             data: slicedCryptoData,
-                            backgroundColor: 'blue',
-                            borderColor: 'blue',
+                            backgroundColor: 'brown',
+                            borderColor: 'black',
                             borderWidth: 1
                         },
                     ]
