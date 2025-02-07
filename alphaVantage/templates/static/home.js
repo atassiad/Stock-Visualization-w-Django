@@ -150,10 +150,12 @@ $('#submit-btn').click(function() {
             'ticker': tickerText,
         },
         success: function (res, status) {
+            button = document.getElementById('submit-btn');
             try {
                 var tickerDisplay = res['sma']['Meta Data']['1: Symbol'];
                 var graphTitle = tickerDisplay + ' (data for the trailing 500 trading days)';
             } catch(error) {
+                button.style.backgroundColor = "#FF7F7F";
                 if (error instanceof TypeError){
                     console.error("ERROR: Invalid ticker, or unable to query ticker", error.message);
                     return 1;
@@ -177,6 +179,8 @@ $('#submit-btn').click(function() {
             var slicedDates = dates.slice(-500);
             var slicedSMA = sma_data.slice(-500);
 
+            //make button green for UI
+            button.style.backgroundColor = "#90ee90";
             // Remove the existing canvas and create a new one
             $('#myChart').remove();
             $('#graph-area').append('<canvas id="myChart"></canvas>');
@@ -231,12 +235,14 @@ $('#submit-btn-2').click(function() {
         },
         success: function (res, status) {
             // Use the symbol from the crytpo metadata
+            button = document.getElementById('submit-btn-2');
             try {
                 var currencyCodeDisplay = res['Time Series (Digital Currency Daily)']['Meta Data']['3. Digital Currency Name'];
                 var graphTitle = currencyCodeDisplay + ' (data for the trailing 500 trading days)';
             } catch(error) {
                 if (error instanceof TypeError){
                     console.error("ERROR: Invalid currency code, or unable to query currency code", error.message);
+                    button.style.backgroundColor = "#FF7F7F";
                     return 1;
                 }
                 console.error("ERROR: ", error.message);
@@ -259,6 +265,9 @@ $('#submit-btn-2').click(function() {
             // Limit to the trailing 500 trading days
             var slicedDates = dates.slice(-500);
             var slicedCryptoData = crypto_data.slice(-500);
+
+            //make button green for UI
+            button.style.backgroundColor = "#90ee90";
 
             // Remove the existing canvas and create a new one
             $('#myChart-2').remove();

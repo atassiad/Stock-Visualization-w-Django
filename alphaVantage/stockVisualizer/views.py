@@ -40,7 +40,7 @@ def get_stock_data(request):
         sma_series = requests.get(f'https://www.alphavantage.co/query?function=SMA&symbol={ticker}&interval=daily&time_period=10&series_type=close&apikey={APIKEY}').json()
         
         output_dictionary['sma'] = sma_series
-
+        
         temp = StockData(symbol=ticker, data=json.dumps(output_dictionary))
         temp.save()
 

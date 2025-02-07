@@ -10,29 +10,29 @@
 </head>
 
 <body>
-    <h2>Interactive Stock Visualizer</h2>
+    <h2>Interactive Stock & Crypto Visualizer</h2>
 
     <!-- First Graph and Input Area-->
-    <label for="ticker-input">Enter Symbol:</label>
-    <input type="text" id="ticker-input">
-    <input type="button" value="submit" id="submit-btn">
+    <div class="input-container">
+        <label for="ticker-input">Enter Symbol:</label>
+        <input type="text" id="ticker-input">
+        <input type="button" value="Submit" id="submit-btn">
+    </div>
     <div id="graph-area">
         <canvas id="myChart"></canvas>
     </div>
-    <div>
-        Friendly reminder: if the graphing function stops working after several successful instances, don't worry! It is likely that you have reached the 5 requests/minute rate limit of the free Alpha Vantage API key. The graph should work again in the next minute or after you obtain a <a href="https://www.alphavantage.co/premium/" target="_blank">premium API key</a> with a higher rate limit.
-    </div>
-    <br>
 
     <!-- Second Graph and Input Area-->
-    <label for="currency_code">Enter Symbol:</label>
-    <input type="text" id="currency_code">
-    <input type="button" value="submit" id="submit-btn-2">
+    <div class="input-container">
+        <label for="currency_code">Enter Currency Code:</label>
+        <input type="text" id="currency_code">
+        <input type="button" value="Submit" id="submit-btn-2">
+    </div>
     <div id="graph-area-2">
         <canvas id="myChart-2"></canvas>
     </div>
     <div>
-        Friendly reminder: if the graphing function stops working after several successful instances, don't worry! It is likely that you have reached the 5 requests/minute rate limit of the free Alpha Vantage API key. The graph should work again in the next minute or after you obtain a <a href="https://www.alphavantage.co/premium/" target="_blank">premium API key</a> with a higher rate limit.
+        Disclaimer: If you notice the graphs stop updating, we have likely hit out API refresh limit for our key.
     </div>
 
     <!-- Imported Script -->
