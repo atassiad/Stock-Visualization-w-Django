@@ -13,31 +13,21 @@ $(document).ready(function(){
             var tickerDisplay = res['sma']['Meta Data']['1: Symbol'];
             var graphTitle = tickerDisplay + ' (data for the trailing 500 trading days)';
 
-            // Extract price data
-            var priceSeries = res['prices']['Time Series (Daily)'];
-            var daily_adjusted_close = [];
-            var dates = [];
-            for (let key in priceSeries) {
-                daily_adjusted_close.push(Number(priceSeries[key]['5. adjusted close']));
-                dates.push(String(key));
-            }
-            
             // Extract SMA data
             var smaSeries = res['sma']['Technical Analysis: SMA'];
             var sma_data = [];
+            var dates = [];
             for (let key in smaSeries) {
                 sma_data.push(Number(smaSeries[key]['SMA']));
                 dates.push(String(key));
             }
             
             // Reverse arrays so that data is in chronological order
-            daily_adjusted_close.reverse();
             sma_data.reverse();
             dates.reverse();
 
             // Limit to the trailing 500 trading days
             var slicedDates = dates.slice(-500);
-            var slicedPrices = daily_adjusted_close.slice(-500);
             var slicedSMA = sma_data.slice(-500);
             
             // Create the chart
@@ -47,13 +37,6 @@ $(document).ready(function(){
                 data: {
                     labels: slicedDates,
                     datasets: [
-                        {
-                            label: 'Daily Adjusted Close',
-                            data: slicedPrices,
-                            backgroundColor: 'green',
-                            borderColor: 'green',
-                            borderWidth: 1
-                        },
                         {
                             label: 'Simple Moving Average (SMA)',
                             data: slicedSMA,
@@ -87,44 +70,34 @@ $(document).ready(function(){
         }
     });
 
-    // On page load, fetch stock data for AAPL by default from the Django backend for Stock Data
+    // On page load, fetch crypto data for BTC by default from the Django backend for Crypto Data
     $.ajax({
         type: "POST",
         url: "/get_crypto_data/",
         data: {
-            'ticker': 'AAPL',
+            'currency_code': 'BTC',
         },
         success: function (res, status) {
-            // Use the symbol from the 'sma' metadata since the 'prices' endpoint returns only an informational message.
-            var tickerDisplay = res['sma']['Meta Data']['1: Symbol'];
-            var graphTitle = tickerDisplay + ' (data for the trailing 500 trading days)';
-
-            // Extract price data
-            var priceSeries = res['prices']['Time Series (Daily)'];
-            var daily_adjusted_close = [];
-            var dates = [];
-            for (let key in priceSeries) {
-                daily_adjusted_close.push(Number(priceSeries[key]['5. adjusted close']));
-                dates.push(String(key));
-            }
+            // Use the symbol from the crypto metadata
+            var currencyCodeDisplay = res['Time Series (Digital Currency Daily)']['Meta Data']['3. Digital Currency Name'];
+            var graphTitle = currencyCodeDisplay + ' (data for the trailing 500 trading days)';
             
-            // Extract SMA data
-            var smaSeries = res['sma']['Technical Analysis: SMA'];
-            var sma_data = [];
-            for (let key in smaSeries) {
-                sma_data.push(Number(smaSeries[key]['SMA']));
+            // Extract crypto data
+            var timeSeries = res['Time Series (Digital Currency Daily)']['Time Series (Digital Currency Daily)'];
+            var crypto_data = [];
+            var dates = []
+            for (let key in timeSeries) {
+                crypto_data.push(Number(timeSeries[key]['4. close']));
                 dates.push(String(key));
             }
             
             // Reverse arrays so that data is in chronological order
-            daily_adjusted_close.reverse();
-            sma_data.reverse();
+            crypto_data.reverse();
             dates.reverse();
 
             // Limit to the trailing 500 trading days
             var slicedDates = dates.slice(-500);
-            var slicedPrices = daily_adjusted_close.slice(-500);
-            var slicedSMA = sma_data.slice(-500);
+            var slicedCryptoData = crypto_data.slice(-500);
             
             // Create the chart
             var ctx = document.getElementById('myChart-2').getContext('2d');
@@ -134,15 +107,8 @@ $(document).ready(function(){
                     labels: slicedDates,
                     datasets: [
                         {
-                            label: 'Daily Adjusted Close',
-                            data: slicedPrices,
-                            backgroundColor: 'green',
-                            borderColor: 'green',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Simple Moving Average (SMA)',
-                            data: slicedSMA,
+                            label: 'Daily Close',
+                            data: slicedCryptoData,
                             backgroundColor: 'blue',
                             borderColor: 'blue',
                             borderWidth: 1
@@ -174,7 +140,7 @@ $(document).ready(function(){
     });
 });
 
-// Update chart when the user submits a new ticker
+// Update stock chart when the user submits a new ticker
 $('#submit-btn').click(function() {
     var tickerText = $('#ticker-input').val();
     $.ajax({
@@ -187,14 +153,8 @@ $('#submit-btn').click(function() {
             var tickerDisplay = res['sma']['Meta Data']['1: Symbol'];
             var graphTitle = tickerDisplay + ' (data for the trailing 500 trading days)';
 
-            var priceSeries = res['prices']['Time Series (Daily)'];
-            var daily_adjusted_close = [];
+            //update dates and smaseries data
             var dates = [];
-            for (let key in priceSeries) {
-                daily_adjusted_close.push(Number(priceSeries[key]['5. adjusted close']));
-                dates.push(String(key));
-            }
-            
             var smaSeries = res['sma']['Technical Analysis: SMA'];
             var sma_data = [];
             for (let key in smaSeries) {
@@ -202,12 +162,10 @@ $('#submit-btn').click(function() {
                 dates.push(String(key));
             }
             
-            daily_adjusted_close.reverse();
             sma_data.reverse();
             dates.reverse();
             
             var slicedDates = dates.slice(-500);
-            var slicedPrices = daily_adjusted_close.slice(-500);
             var slicedSMA = sma_data.slice(-500);
 
             // Remove the existing canvas and create a new one
@@ -220,15 +178,82 @@ $('#submit-btn').click(function() {
                     labels: slicedDates,
                     datasets: [
                         {
-                            label: 'Daily Adjusted Close',
-                            data: slicedPrices,
-                            backgroundColor: 'green',
-                            borderColor: 'green',
-                            borderWidth: 1
-                        },
-                        {
                             label: 'Simple Moving Average (SMA)',
                             data: slicedSMA,
+                            backgroundColor: 'blue',
+                            borderColor: 'blue',
+                            borderWidth: 1
+                        },
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            //beginAtZero: false
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: graphTitle
+                        }
+                    }
+                }
+            });
+        },
+        error: function (err) {
+            console.error("Error fetching stock data for ticker:", tickerText, err);
+        }
+    });
+});
+
+// Update crypto chart when user submits new currency_code
+$('#submit-btn-2').click(function() {
+    var currency_code = $('#currency_code').val();
+    $.ajax({
+        type: "POST",
+        url: "/get_crypto_data/",
+        data: {
+            'currency_code': currency_code,
+        },
+        success: function (res, status) {
+            // Use the symbol from the crytpo metadata
+            var currencyCodeDisplay = res['Time Series (Digital Currency Daily)']['Meta Data']['3. Digital Currency Name'];
+            var graphTitle = currencyCodeDisplay + ' (data for the trailing 500 trading days)';
+            
+            // Extract crypto data
+            var timeSeries = res['Time Series (Digital Currency Daily)']['Time Series (Digital Currency Daily)'];
+            var crypto_data = [];
+            var dates = []
+            for (let key in timeSeries) {
+                crypto_data.push(Number(timeSeries[key]['4. close']));
+                dates.push(String(key));
+            }
+            
+            // Reverse arrays so that data is in chronological order
+            crypto_data.reverse();
+            dates.reverse();
+
+            // Limit to the trailing 500 trading days
+            var slicedDates = dates.slice(-500);
+            var slicedCryptoData = crypto_data.slice(-500);
+
+            // Remove the existing canvas and create a new one
+            $('#myChart-2').remove();
+            $('#graph-area-2').append('<canvas id="myChart-2"></canvas>');
+            var ctx = document.getElementById('myChart-2').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: slicedDates,
+                    datasets: [
+                        {
+                            label: 'Daily Close',
+                            data: slicedCryptoData,
                             backgroundColor: 'blue',
                             borderColor: 'blue',
                             borderWidth: 1

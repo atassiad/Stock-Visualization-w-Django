@@ -37,10 +37,8 @@ def get_stock_data(request):
 
         output_dictionary = {}
 
-        price_series = requests.get(f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={ticker}&apikey={APIKEY}&outputsize=full').json()
         sma_series = requests.get(f'https://www.alphavantage.co/query?function=SMA&symbol={ticker}&interval=daily&time_period=10&series_type=close&apikey={APIKEY}').json()
-
-        output_dictionary['prices'] = price_series
+        
         output_dictionary['sma'] = sma_series
 
         temp = StockData(symbol=ticker, data=json.dumps(output_dictionary))
@@ -56,24 +54,22 @@ def get_stock_data(request):
 @csrf_exempt
 def get_crypto_data(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        ticker = request.POST.get('ticker', 'null')
-        ticker = ticker.upper()
+        currency_code = request.POST.get('currency_code', 'null')
+        currency_code = currency_code.upper()
 
         if DATABASE_ACCESS == True:
             #checking if the database already has data stored for this ticker before querying the Alpha Vantage API
-            if CryptoData.objects.filter(symbol=ticker).exists(): 
-                entry = CryptoData.objects.filter(symbol=ticker)[0]
+            if CryptoData.objects.filter(symbol=currency_code).exists(): 
+                entry = CryptoData.objects.filter(symbol=currency_code)[0]
                 return HttpResponse(entry.data, content_type='application/json')
 
         output_dictionary = {}
 
-        price_series = requests.get(f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={ticker}&apikey={APIKEY}&outputsize=full').json()
-        sma_series = requests.get(f'https://www.alphavantage.co/query?function=SMA&symbol={ticker}&interval=daily&time_period=10&series_type=close&apikey={APIKEY}').json()
+        digital_currency_daily = requests.get(f'https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol={currency_code}&market=USD&apikey={APIKEY}').json()
 
-        output_dictionary['prices'] = price_series
-        output_dictionary['sma'] = sma_series
+        output_dictionary['Time Series (Digital Currency Daily)'] = digital_currency_daily
 
-        temp = CryptoData(symbol=ticker, data=json.dumps(output_dictionary))
+        temp = CryptoData(symbol=currency_code, data=json.dumps(output_dictionary))
         temp.save()
 
         return HttpResponse(json.dumps(output_dictionary), content_type='application/json')
