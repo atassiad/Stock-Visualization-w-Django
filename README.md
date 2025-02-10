@@ -12,15 +12,20 @@ This project is an interactive stock visualization tool designed to help users e
 ## Installation
 
 Use the package manager [conda] to install project libraries
-[Anaconda Website](https://www.anaconda.com/)
+[Anaconda Website](https://www.ahttp://127.0.0.1:8000/naconda.com/)
 
-1. 
+Install Libraries
+
 conda install django
 conda install requests
-2. Database Migration
+
+Database Migration
+
 python3 manage.py makemigrations
 python3 manage.py migrate
-3. Launch
+
+Launch
+
 Launch website using python3 manage.py runserver
 
 ## Contributing
